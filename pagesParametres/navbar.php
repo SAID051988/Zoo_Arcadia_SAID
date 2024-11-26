@@ -69,7 +69,7 @@
       </button>
       <div class="collapse navbar-collapse py-4 py-lg-0" id="navbarCollapse">
         <div class="navbar-nav ms-auto">
-          <a href="index.html" class="nav-item nav-link active">Accueil</a>
+          <a href="../index.php" class="nav-item nav-link active">Accueil</a>
           <a href="about.html" class="nav-item nav-link">À propos</a>
           <a href="service.html" class="nav-item nav-link">Services</a>
           <div class="nav-item dropdown">
@@ -80,8 +80,8 @@
               >Pages</a
             >
             <div class="dropdown-menu rounded-0 rounded-bottom m-0">
-              <a href="animal.html" class="dropdown-item">Nos Animaux</a>
-              <a href="membership.html" class="dropdown-item">Adhésion</a>
+            <a href="../pages/liste_animaux.php" class="dropdown-item">Nos Animaux</a>
+            <a href="../habitats/gerer_habitats.php" class="dropdown-item">Nos habitats</a>
               <a href="visiting.html" class="dropdown-item">Heures de Visite</a>
               <a href="testimonial.html" class="dropdown-item">Témoignages</a>
               <a href="404.html" class="dropdown-item">Page 404</a>

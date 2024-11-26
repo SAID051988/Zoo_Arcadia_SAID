@@ -69,7 +69,7 @@
       </button>
       <div class="collapse navbar-collapse py-4 py-lg-0" id="navbarCollapse">
         <div class="navbar-nav ms-auto">
-          <a href="index.html" class="nav-item nav-link active">Accueil</a>
+          <a href="index.php" class="nav-item nav-link active">Accueil</a>
           <a href="about.html" class="nav-item nav-link">À propos</a>
           <a href="service.html" class="nav-item nav-link">Services</a>
           <div class="nav-item dropdown">
