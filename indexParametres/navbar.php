@@ -71,7 +71,7 @@
         <div class="navbar-nav ms-auto">
           <a href="index.php" class="nav-item nav-link active">Accueil</a>
           <a href="about.html" class="nav-item nav-link">À propos</a>
-          <a href="service.html" class="nav-item nav-link">Services</a>
+          <a href="services/gerer_service.php" class="nav-item nav-link">Services</a>
           <div class="nav-item dropdown">
             <a
               href="#"
@@ -89,7 +89,7 @@
           </div>
           <a href="contact.html" class="nav-item nav-link">Contact</a>
         </div>
-        <a href="./pages/seConnecter.php" class="btn btn-primary"
+        <a href="inscription/formulaire_connexion_utilisateur.php" class="btn btn-primary"
           >Se connecter<i class="fa fa-arrow-right ms-3"></i
         ></a>
       </div>
