@@ -57,7 +57,7 @@
     >
       <a href="../index.php" class="navbar-brand p-0">
         <img class="img-fluid me-3" src="../img/icon/icon-10.png" alt="Icône" />
-        <h1 class="m-0 text-primary">ZooAccradia</h1>
+        <h1 class="m-0 text-primary">ZooArcadia</h1>
       </a>
       <button
         type="button"
@@ -71,7 +71,7 @@
         <div class="navbar-nav ms-auto">
           <a href="../index.php" class="nav-item nav-link active">Accueil</a>
           <a href="about.html" class="nav-item nav-link">À propos</a>
-          <a href="s../ervices/gerer_service.php" class="nav-item nav-link">Services</a>
+          <a href="../services/gerer_service.php" class="nav-item nav-link">Services</a>
           <div class="nav-item dropdown">
             <a
               href="#"

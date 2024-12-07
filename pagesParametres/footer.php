@@ -8,13 +8,13 @@
           <div class="col-lg-3 col-md-6">
             <h5 class="text-light mb-4">Adresse</h5>
             <p class="mb-2">
-              <i class="fa fa-map-marker-alt me-3"></i>123 Rue, New York, USA
+              <i class="fa fa-map-marker-alt me-3"></i>18 rue de la réussite 31150 Brocéliande ,France
             </p>
             <p class="mb-2">
-              <i class="fa fa-phone-alt me-3"></i>+012 345 67890
+              <i class="fa fa-phone-alt me-3"></i>+0533333333
             </p>
             <p class="mb-2">
-              <i class="fa fa-envelope me-3"></i>info@example.com
+              <i class="fa fa-envelope me-3"></i>ZooArcadia@mail.com
             </p>
             <div class="d-flex pt-2">
               <a class="btn btn-outline-light btn-social" href=""
@@ -49,7 +49,7 @@
           </div>
           <div class="col-lg-3 col-md-6">
             <h5 class="text-light mb-4">Bulletin d'information</h5>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>Découvrez les dernières nouvelles, les événements à venir, et les faits marquants sur nos incroyables animaux.</p>
             <div class="position-relative mx-auto" style="max-width: 400px">
               <input
                 class="form-control border-0 w-100 py-3 ps-4 pe-5"
@@ -70,17 +70,17 @@
         <div class="copyright">
           <div class="row">
             <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-              &copy; <a class="border-bottom" href="#">Nom de votre site</a>, Tous
+              &copy; <a class="border-bottom" href="#">ZooArcadia</a>, Tous
               droits réservés.
             </div>
             <div class="col-md-6 text-center text-md-end">
               <!--/*** Ce modèle est gratuit tant que vous gardez le lien de crédit du pied de page. Pour utiliser le modèle sans crédit, achetez une licence sur "https://htmlcodex.com/credit-removal". Merci pour votre soutien. ***/-->
               Conçu par
               <a class="border-bottom" href="https://htmlcodex.com"
-                >HTML Codex</a
+                >Mohamed SAID</a
               >
               <br />Distribué par:
-              <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+              <a href="https://themewagon.com" target="_blank">Mohamed SAID</a>
             </div>
           </div>
         </div>

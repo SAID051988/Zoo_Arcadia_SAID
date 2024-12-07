@@ -13,7 +13,7 @@
               <i class="fa fa-phone-alt me-3"></i>+0533333333
             </p>
             <p class="mb-2">
-              <i class="fa fa-envelope me-3"></i>Arcadia@mail.com
+              <i class="fa fa-envelope me-3"></i>ZooArcadia@mail.com
             </p>
             <div class="d-flex pt-2">
               <a class="btn btn-outline-light btn-social" href=""
