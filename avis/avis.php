@@ -6,6 +6,12 @@ include("../pagesParametres/header.php");
 require_once '../dbconnect.php';
 require_once '../config.php';
 ?>
+<style>
+        /* code CSS */
+        .tde {height: 40px;width: 40px;cursor: pointer;}
+        #value {height: 40px; width: 20px; background: #D81324;}
+        #glob {display: flex;}
+</style>
     <!-- Contact Start -->
     <div class="container-xxl py-5">
         <div class="container">
@@ -17,22 +23,22 @@ require_once '../config.php';
             <div class="col-12">
                     <div class="row gy-4">
                         <div class="col-md-4">
-                            <div class="bg-light d-flex flex-column justify-content-center p-4">
-                                <h5 class="text-uppercase">// NOUS EVALUER ! //</h5>
+                            <div class="bg-primary  text-white d-flex flex-column justify-content-center p-4">
+                                <h5 class="text-uppercase   text-white">// NOUS EVALUER ! //</h5>
                                 <p class="m-0"><i class="fa fa-phone text-primary me-2"></i>
                                 Mobile: 06 12 78 55 **<br>
                                 Assistance: 03 74 52 86 **</p>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="bg-light d-flex flex-column justify-content-center p-4">
-                                <h5 class="text-uppercase">// Votre avis compte pour nous //</h5>
+                            <div class="bg-primary text-white d-flex flex-column justify-content-center p-4">
+                                <h5 class="text-uppercase  text-white ">// Votre avis compte pour nous //</h5>
                                 <p class="m-0"><i class="fa fa-envelope-open text-primary me-2"></i>avis@example.com</p>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="bg-light d-flex flex-column justify-content-center p-4">
-                                <h5 class="text-uppercase">// Technical //</h5>
+                            <div class="bg-primary  text-white d-flex flex-column justify-content-center p-4">
+                                <h5 class="text-uppercase   text-white">// Technical //</h5>
                                 <p class="m-0"><i class="fa fa-envelope-open text-primary me-2"></i>tech@example.com</p>
                             </div>
                         </div>
@@ -41,7 +47,7 @@ require_once '../config.php';
                 <?php
                 if(isset($_SESSION['roleUtilisateur']) && $_SESSION['roleUtilisateur']=='Employe'){
                     //Appeler la page connexion.php
-                    require('../connexion/connexion.php');
+                    require_once '../dbconnect.php';
                     // Traitement des avis des clients
                     $statement_avis=$pdo->prepare("select * from avis where valider_avis=0");
                     $statement_avis->execute();
@@ -50,7 +56,7 @@ require_once '../config.php';
                     // Déclarer une variable $row_count pour récupérer le nombre des avis non encore validés
                     $row_count=count($row_avis);
                 ?>
-                <table class="table table-danger table-striped">
+                <table class="table table-primary table-bordered">
                     <thead>
                         <tr><th>Nom</th><th>Email</th><th>Profession</th><th>Commentaire</th><th>Note</th><th>Date</th><th>Valide</th></tr>
                     </thead>
@@ -68,7 +74,7 @@ require_once '../config.php';
                         ?>
                         <td>
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="valider_avis_<?php echo $avis['id_avis']; ?>" <?php echo ($avis['valider_avis'] == 1 ? 'checked' : ''); ?> onchange="updateValiderAvis(<?php echo $avis['id_avis']; ?>)">
+                            <input class="form-check-input bg-primary" type="checkbox" id="valider_avis_<?php echo $avis['id_avis']; ?>" <?php echo ($avis['valider_avis'] == 1 ? 'checked' : ''); ?> onchange="updateValiderAvis(<?php echo $avis['id_avis']; ?>)">
                         </div>
                     </td>
                     <?php
@@ -82,7 +88,8 @@ require_once '../config.php';
                 if($row_count<=0){
                     echo '<div  class="alert alert-danger" role="alert"> Tous les avis ont été validés</div>';
                 }
-                }else{
+
+            }else{
                 ?>
                 <div class="col-md-12">
                     <div class="wow fadeInUp" data-wow-delay="0.2s">
@@ -184,6 +191,77 @@ require_once '../config.php';
         </div>
     </div>
     <!-- Contact End -->
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    // Fonction pour récupérer la valeur des étoiles dans le stockage local
+    function getStoredRating() {
+        return localStorage.getItem('userRating') || 0;
+    }
+
+    // Fonction pour définir la valeur des étoiles dans le stockage local
+    function setStoredRating(value) {
+        localStorage.setItem('userRating', value);
+    }
+
+    // Initialiser la valeur des étoiles avec celle stockée localement
+    var initialRating = getStoredRating();
+    $(".tde").slice(0, initialRating).css("backgroundColor", "#D81324");
+
+    // on détecte la présence de la souris sur une étoile
+    $(".tde").mouseover(function() {
+        var nbr = $(this).prop('id').substring(4);
+        $(this).css("backgroundColor", "#D81324");
+        $(".tde").slice(0, nbr).css("backgroundColor", "#D81324");
+        $(".tde").slice(nbr).css("backgroundColor", "");
+    });
+
+    // et quand la souris s'en va, on annule le fond jaune sous les étoiles pour garder uniquement celui de #value
+    $("#value").mouseout(function() {
+        // Ne rien faire ici pour que les étoiles restent colorées après que la souris les a quittées
+    });
+
+    // on détecte le clic sur une étoile
+    $(".tde").click(function() {
+        var selectedValue = $(this).attr('data-value');
+        //console.log("Étoile sélectionnée : " + selectedValue);
+
+        // Enregistrez la valeur des étoiles dans le stockage local
+        setStoredRating(selectedValue);
+
+        // Mettez à jour la valeur du champ hidden dans le formulaire
+        $("#note_avis").val(selectedValue);
+    });
+</script>
+
+<script>
+     function updateValiderAvis(id) {
+        // Récupérez l'état de la checkbox
+        var isChecked = $("#valider_avis_" + id).prop("checked");
+
+        // Utilisez AJAX pour envoyer la mise à jour à votre script PHP
+        $.ajax({
+            url: 'update_valider_avis.php', // Remplacez cela par le chemin de votre script PHP de mise à jour
+            method: 'POST',
+            data: {
+                id: id,
+                value: isChecked ? 1 : 0
+            },
+            success: function(response) {
+                // Affichez un message de succès ou mettez à jour l'interface utilisateur si nécessaire
+                console.log(response);
+            },
+            error: function(error) {
+                // Gérez les erreurs ici
+                console.error(error);
+            }
+        });
+    }
+</script>
+
+
+
+
 <?php
 include("../pagesParametres/footer.php");
 ?>

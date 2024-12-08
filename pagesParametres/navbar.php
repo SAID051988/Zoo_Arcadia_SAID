@@ -87,7 +87,7 @@
               <a href="404.html" class="dropdown-item">Page 404</a>
             </div>
           </div>
-          <a href="contact.html" class="nav-item nav-link">Contact</a>
+          <a href="../contact/contact.php" class="nav-item nav-link">Contact</a>
         </div>
         <a href="../inscription/formulaire_connexion_utilisateur.php" class="btn btn-primary"
           >Se connecter<i class="fa fa-arrow-right ms-3"></i
