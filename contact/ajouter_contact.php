@@ -1,5 +1,5 @@
 <?php
-require_once '../connexion/connexion.php';
+require_once '../dbconnect.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupérer les données du formulaire
     $prenomNom = $_POST['txtPrenomNom'];

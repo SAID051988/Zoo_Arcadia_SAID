@@ -1,5 +1,5 @@
-<?php 
- include("../pagesParametres/beforeHeader.php");
+<?php
+include("../pagesParametres/beforeHeader.php");
 include("../pagesParametres/navbar.php");
 include("../pagesParametres/header.php");
 require_once '../dbconnect.php';
@@ -64,7 +64,7 @@ $pages = ceil($total / $limit);
       <tr>
         <th>ID</th>
         <th>Nom</th>
-        <th>Description</th>
+
         <th>Image</th>
         <th>Actions</th>
       </tr>
@@ -74,7 +74,7 @@ $pages = ceil($total / $limit);
         <tr>
           <td><?= $habitat['id_habitat'] ?></td>
           <td><?= htmlspecialchars($habitat['nom_habitat']) ?></td>
-          <td><?= htmlspecialchars($habitat['description_habitat']) ?></td>
+
           <td>
             <img src="<?= htmlspecialchars(BASE_IMAGE_PATH . $habitat['image_path']) ?>" alt="Image" class="table-image"
               onclick="openModal('<?= htmlspecialchars(BASE_IMAGE_PATH . $habitat['image_path']) ?>')">
@@ -83,9 +83,7 @@ $pages = ceil($total / $limit);
             <a href="javascript:void(0);" class="text-warning edit-btn" data-id="<?= $habitat['id_habitat'] ?>"><i
                 class="fas fa-edit fa-lg"></i></a>
 
-            <a href="javascript:void(0);" 
-               class="text-danger btn-delete" 
-               data-id="<?= $habitat['id_habitat'] ?>">
+            <a href="javascript:void(0);" class="text-danger btn-delete" data-id="<?= $habitat['id_habitat'] ?>">
               <i class="fas fa-trash-alt fa-lg"></i>
             </a>
           </td>
@@ -150,20 +148,31 @@ $pages = ceil($total / $limit);
 </div> -->
 <!-- Modal pour afficher l'image en grand -->
 <div class="modal fade" id="habitatModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Aperçu de l'image</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Aperçu de l'image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <img id="modalImage" class="img-fluid" src="" alt="Image agrandie" style="max-width: 100%; max-height: 100%;">
+        <!-- Description de l'habitat -->
+        <div>
+          <h5>Description</h5><span id="modalDescription"></span>
         </div>
-        <div class="modal-body">
-          <img id="modalImage" class="img-fluid" src="" alt="Image agrandie" style="max-width: 100%; max-height: 100%;">
+
+        <!-- Liste des animaux associés -->
+        <div>
+          <h5>Animaux Affectés</h5>
+          <div id="modalAnimaux"></div>
         </div>
+
       </div>
     </div>
   </div>
-  <!-- Modal pour modifier un habitat -->
-  <div class="modal fade" id="editHabitatModal" tabindex="-1" aria-hidden="true">
+</div>
+<!-- Modal pour modifier un habitat -->
+<div class="modal fade" id="editHabitatModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -275,7 +284,6 @@ $pages = ceil($total / $limit);
         .then(data => {
           document.getElementById('editHabitatId').value = data.id_habitat;
           document.getElementById('editNomHabitat').value = data.nom_habitat;
-          document.getElementById('editDescriptionHabitat').value = data.description_habitat;
 
           // Afficher la modale de modification
           var editModal = new bootstrap.Modal(document.getElementById('editHabitatModal'), {});
@@ -340,7 +348,6 @@ $pages = ceil($total / $limit);
       .then(data => {
         if (data.success) {
           document.getElementById('detailsNomHabitat').textContent = data.habitat.nom_habitat;
-          document.getElementById('detailsDescriptionHabitat').textContent = data.habitat.description_habitat;
 
           // Afficher la modale
           var detailsModal = new bootstrap.Modal(document.getElementById('detailsHabitatModal'));
@@ -361,166 +368,199 @@ $pages = ceil($total / $limit);
 
 
 <script>
-    // Fonction pour afficher l'image en grand dans le modal
-    function openModal(imagePath) {
-      document.getElementById("modalImage").src = imagePath;
-      var myModal = new bootstrap.Modal(document.getElementById('habitatModal'), {});
-      myModal.show();
+  // Fonction pour afficher l'image en grand dans le modal
+  function openModal(imagePath) {
+    document.getElementById("modalImage").src = imagePath;
+    var myModal = new bootstrap.Modal(document.getElementById('habitatModal'), {});
+    myModal.show();
+  }
+
+  // Mettre à jour le chemin de l'image lors de la sélection d'un fichier
+  document.getElementById('imageUpload').addEventListener('change', function () {
+    if (this.files.length > 0) {
+      let fileName = this.files[0].name.replace(/\s+/g, '_'); // Remplace les espaces par des underscores
+      document.getElementById('imagePath').value = "img/animaux/" + fileName; // Affiche le chemin modifié
+    }
+  });
+
+  // Soumettre le formulaire via AJAX
+  document.getElementById('addAnimalForm').addEventListener('submit', function (event) {
+    event.preventDefault(); // Empêche la soumission classique du formulaire
+
+    const formData = new FormData(this);
+
+    // Récupérer et renommer le fichier image
+    const imageInput = document.getElementById('imageUpload');
+    if (imageInput.files.length > 0) {
+      let imageFile = imageInput.files[0];
+      let modifiedFileName = imageFile.name.replace(/\s+/g, '_'); // Remplace les espaces par des underscores
+
+      // Créer un nouveau fichier avec le nom modifié
+      let modifiedFile = new File([imageFile], modifiedFileName, { type: imageFile.type });
+
+      // Mettre à jour FormData avec le fichier renommé
+      formData.set('image', modifiedFile);
     }
 
-    // Mettre à jour le chemin de l'image lors de la sélection d'un fichier
-    document.getElementById('imageUpload').addEventListener('change', function () {
-      if (this.files.length > 0) {
-        let fileName = this.files[0].name.replace(/\s+/g, '_'); // Remplace les espaces par des underscores
-        document.getElementById('imagePath').value = "img/animaux/" + fileName; // Affiche le chemin modifié
-      }
-    });
-
-    // Soumettre le formulaire via AJAX
-    document.getElementById('addAnimalForm').addEventListener('submit', function (event) {
-      event.preventDefault(); // Empêche la soumission classique du formulaire
-
-      const formData = new FormData(this);
-
-      // Récupérer et renommer le fichier image
-      const imageInput = document.getElementById('imageUpload');
-      if (imageInput.files.length > 0) {
-        let imageFile = imageInput.files[0];
-        let modifiedFileName = imageFile.name.replace(/\s+/g, '_'); // Remplace les espaces par des underscores
-
-        // Créer un nouveau fichier avec le nom modifié
-        let modifiedFile = new File([imageFile], modifiedFileName, { type: imageFile.type });
-
-        // Mettre à jour FormData avec le fichier renommé
-        formData.set('image', modifiedFile);
-      }
-
-      // Envoyer le formulaire via fetch
-      fetch('add_animal.php', {
-        method: 'POST',
-        body: formData
+    // Envoyer le formulaire via fetch
+    fetch('add_animal.php', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => {
+        // Vérifiez si le type de contenu est JSON
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          return response.json();
+        } else {
+          throw new Error("Réponse non-JSON reçue du serveur");
+        }
       })
-        .then(response => {
-          // Vérifiez si le type de contenu est JSON
-          const contentType = response.headers.get('content-type');
-          if (contentType && contentType.includes('application/json')) {
-            return response.json();
-          } else {
-            throw new Error("Réponse non-JSON reçue du serveur");
-          }
-        })
-        .then(data => {
-          if (data.success) {
-            alert(data.message);
-            // Fermer le modal ou rafraîchir la liste d'animaux
-          } else {
-            alert(data.message);
-          }
-        })
-        .catch(error => {
-          console.error('Erreur:', error);
-          alert("Une erreur s'est produite lors de l'ajout de l'animal.");
-        });
-    });
-
-  </script>
-
-  <!-- Modifier un image -->
-  <script>
-    document.querySelectorAll('.edit-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        const animalId = this.getAttribute('data-id');
-
-        // Requête pour récupérer les données de l'animal en AJAX
-        fetch(`get_animal.php?id=${animalId}`)
-          .then(response => response.json())
-          .then(data => {
-            document.getElementById('editAnimalId').value = data.id_animal;
-            document.getElementById('editNomAnimal').value = data.nom_animal;
-            document.getElementById('editHabitatAnimal').value = data.id_habitat;
-            document.getElementById('editRaceAnimal').value = data.id_race;
-            document.getElementById('editStatusAnimal').value = data.status_animal;
-
-            // Afficher la modale de modification
-            var editModal = new bootstrap.Modal(document.getElementById('editHabitatModal'), {});
-            editModal.show();
-          })
-          .catch(error => console.error('Erreur:', error));
+      .then(data => {
+        if (data.success) {
+          alert(data.message);
+          // Fermer le modal ou rafraîchir la liste d'animaux
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Erreur:', error);
+        alert("Une erreur s'est produite lors de l'ajout de l'animal.");
       });
-    });
+  });
 
-    document.getElementById('editAnimalForm').addEventListener('submit', function (event) {
-      event.preventDefault();
+</script>
 
-      const formData = new FormData(this);
+<!-- Modifier un image -->
+<script>
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function () {
+      const animalId = this.getAttribute('data-id');
 
-      fetch('edit_animal.php', {
-        method: 'POST',
-        body: formData
-      })
+      // Requête pour récupérer les données de l'animal en AJAX
+      fetch(`get_animal.php?id=${animalId}`)
         .then(response => response.json())
         .then(data => {
-          if (data.success) {
-            alert(data.message);
-            location.reload(); // Recharge la page pour voir les modifications
-          } else {
-            alert(data.message);
-          }
+          document.getElementById('editAnimalId').value = data.id_animal;
+          document.getElementById('editNomAnimal').value = data.nom_animal;
+          document.getElementById('editHabitatAnimal').value = data.id_habitat;
+          document.getElementById('editRaceAnimal').value = data.id_race;
+          document.getElementById('editStatusAnimal').value = data.status_animal;
+
+          // Afficher la modale de modification
+          var editModal = new bootstrap.Modal(document.getElementById('editHabitatModal'), {});
+          editModal.show();
         })
         .catch(error => console.error('Erreur:', error));
     });
-  </script>
-  <script>
-    function showAnimalDetails(id) {
-      fetch(`details_animal.php?id=${id}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            // Remplir les champs de la modale avec les données reçues
-            document.getElementById('detailsNomAnimal').textContent = data.animal.nom_animal;
-            document.getElementById('detailsStatusAnimal').textContent = data.animal.status_animal;
-            document.getElementById('detailsHabitat').textContent = data.animal.habitat;
-            document.getElementById('detailsRace').textContent = data.animal.race;
+  });
 
-            // Afficher la modale
-            var detailsModal = new bootstrap.Modal(document.getElementById('detailsAnimalModal'));
-            detailsModal.show();
-          } else {
-            alert("Erreur : " + data.message);
-          }
-        })
-        .catch(error => {
-          console.error('Erreur:', error);
-          alert("Une erreur s'est produite lors du chargement des détails.");
-        });
-    }
-  </script>
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Gestion du clic sur le bouton supprimer
-  document.querySelectorAll('.btn-delete').forEach(button => {
-    button.addEventListener('click', function () {
-      const idAnimal = this.getAttribute('data-id');
-      if (confirm('Êtes-vous sûr de vouloir supprimer cet animal ?')) {
-        fetch(`supprimer_animal.php?id=${idAnimal}`, { method: 'GET' })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              alert('Animal supprimé avec succès.');
-              // Actualiser la table dynamiquement
-              document.querySelector(`#animal-row-${idAnimal}`).remove();
-            } else {
-              alert('Erreur lors de la suppression de l\'animal.');
-            }
-          })
-          .catch(err => console.error('Erreur AJAX:', err));
-      }
+  document.getElementById('editAnimalForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch('edit_animal.php', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message);
+          location.reload(); // Recharge la page pour voir les modifications
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => console.error('Erreur:', error));
+  });
+</script>
+<script>
+  function showAnimalDetails(id) {
+    fetch(`details_animal.php?id=${id}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Remplir les champs de la modale avec les données reçues
+          document.getElementById('detailsNomAnimal').textContent = data.animal.nom_animal;
+          document.getElementById('detailsStatusAnimal').textContent = data.animal.status_animal;
+          document.getElementById('detailsHabitat').textContent = data.animal.habitat;
+          document.getElementById('detailsRace').textContent = data.animal.race;
+
+          // Afficher la modale
+          var detailsModal = new bootstrap.Modal(document.getElementById('detailsAnimalModal'));
+          detailsModal.show();
+        } else {
+          alert("Erreur : " + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Erreur:', error);
+        alert("Une erreur s'est produite lors du chargement des détails.");
+      });
+  }
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Gestion du clic sur le bouton supprimer
+    document.querySelectorAll('.btn-delete').forEach(button => {
+      button.addEventListener('click', function () {
+        const idAnimal = this.getAttribute('data-id');
+        if (confirm('Êtes-vous sûr de vouloir supprimer cet animal ?')) {
+          fetch(`supprimer_animal.php?id=${idAnimal}`, { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                alert('Animal supprimé avec succès.');
+                // Actualiser la table dynamiquement
+                document.querySelector(`#animal-row-${idAnimal}`).remove();
+              } else {
+                alert('Erreur lors de la suppression de l\'animal.');
+              }
+            })
+            .catch(err => console.error('Erreur AJAX:', err));
+        }
+      });
     });
   });
+
+  $('#habitatModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // L'élément qui a déclenché l'ouverture du modal
+    var habitatId = button.data('id'); // L'ID de l'habitat à partir de l'attribut data-id
+
+    // Effectuer une requête AJAX pour récupérer les animaux associés à cet habitat
+    $.ajax({
+        url: 'get_animaux.php', // Le fichier PHP qui récupère les animaux par habitat
+        method: 'GET',
+        data: { id_habitat: habitatId }, // L'ID de l'habitat
+        success: function(response) {
+            console.log(response); // Vérifier la réponse dans la console
+
+            // Mettre à jour le contenu du modal avec la réponse AJAX
+            $('#modalImage').attr('src', response.image);
+            $('#modalDescription').text(response.description);
+
+            // Affichage des animaux
+            var animauxList = '';
+            if (response.animaux.length > 0) {
+                response.animaux.forEach(function(animal) {
+                    animauxList += '<p>' + animal + '</p>'; // Affichage de chaque animal
+                });
+            } else {
+                animauxList = '<p>Aucun animal affecté.</p>';
+            }
+            $('#modalAnimaux').html(animauxList); // Injecter la liste des animaux dans le modal
+        },
+        error: function() {
+            alert('Erreur lors de la récupération des animaux.');
+        }
+    });
 });
 
 
-  </script>
+</script>
 
 </div>
 
