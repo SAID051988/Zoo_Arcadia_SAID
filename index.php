@@ -349,8 +349,12 @@ $animaux = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php
       }
       ?>
-    </div>
+      </div>
   </div>
+      <div class="col-lg-12 text-lg-end">
+        <a class="btn btn-primary py-3 px-5" href="avis/ajouter_avis.php">Laissez un aviz</a>
+      </div>
+    
 </div>
 <!-- Fin des Témoignages -->
 

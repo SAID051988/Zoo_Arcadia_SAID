@@ -17,7 +17,7 @@ require_once '../config.php';
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="text-primary text-uppercase">// EVALUEZ-NOUS //</h6>
-                <h1 class="mb-5">Gestion des commentaires</h1>
+                <h1 class="mb-5">Gestion des avis</h1>
             </div>
             <div class="row g-4">
             <div class="col-12">
