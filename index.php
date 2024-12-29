@@ -36,7 +36,7 @@ $row_avis = $statement_avis->fetchAll(PDO::FETCH_ASSOC);
 <div class="container-xxl py-5">
   <div class="container">
     <div class="row g-5">
-      <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+      <div class="col-lg-6" data-wow-delay="0.1s">
         <p><span class="text-primary me-2">#</span>Bienvenue à ZooArcadia</p>
         <h1 class="display-5 mb-4">
           Pourquoi visiter le parc <span class="text-primary">ZooArcadia</span> ?
@@ -60,7 +60,7 @@ $row_avis = $statement_avis->fetchAll(PDO::FETCH_ASSOC);
         </h5>
         <a class="btn btn-primary py-3 px-5 mt-3" href="">En savoir plus</a>
       </div>
-      <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+      <div class="col-lg-6" data-wow-delay="0.5s">
         <div class="img-border">
           <img class="img-fluid" src="img/about.jpg" alt="" />
         </div>
@@ -179,68 +179,109 @@ $animaux = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 <!-- Fin de la section "Animaux" -->
 
+<?php
+// Récupération des heures de visite
+$query = "SELECT jour, ouverture, fermeture, ferme FROM heures_visite ORDER BY FIELD(jour, 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$heuresVisite = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+<?php
+// Récupération de la date actuelle
+$dateActuelle = new DateTime();
 
+// Calcul du début de la semaine (lundi)
+$debutSemaine = clone $dateActuelle;
+$debutSemaine->modify('monday this week');
+
+// Calcul de la fin de la semaine (dimanche)
+$finSemaine = clone $debutSemaine;
+$finSemaine->modify('sunday this week');
+
+// Formatage des dates au format "jour mois année"
+$format = 'd-m-Y';
+$jourDebut = $debutSemaine->format('l');
+$dateDebut = $debutSemaine->format($format);
+$jourFin = $finSemaine->format('l');
+$dateFin = $finSemaine->format($format);
+
+// Génération du tableau associatif pour les jours et leurs dates
+$jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+$datesSemaine = [];
+$currentDate = clone $debutSemaine;
+
+foreach ($jours as $jour) {
+    $datesSemaine[$jour] = $currentDate->format($format);
+    $currentDate->modify('+1 day');
+}
+
+// Affichage des dates pour vérification
+/*
+echo '<pre>';
+print_r($datesSemaine);
+echo '</pre>';
+*/
+?>
+
+<style>
+  .small-text {
+    font-size: 0.3em; /* Réduit la taille de la police */
+    opacity: 0.8; /* Rendre le texte légèrement moins visible */
+    display: inline-block; /* Maintenir sur la même ligne */
+}
+</style>
 <!-- Heures de Visite Début -->
 <div class="container-xxl bg-primary visiting-hours my-5 py-5 wow fadeInUp" data-wow-delay="0.1s">
   <div class="container py-5">
     <div class="row g-5">
-      <div class="col-md-6 wow fadeIn" data-wow-delay="0.3s">
-        <h1 class="display-6 text-white mb-5">Heures de Visite</h1>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <span>Lundi</span>
-            <span>9:00 - 18:00</span>
-          </li>
-          <li class="list-group-item">
-            <span>Mardi</span>
-            <span>9:00 - 18:00</span>
-          </li>
-          <li class="list-group-item">
-            <span>Mercredi</span>
-            <span>9:00 - 18:00</span>
-          </li>
-          <li class="list-group-item">
-            <span>Jeudi</span>
-            <span>9:00 - 18:00</span>
-          </li>
-          <li class="list-group-item">
-            <span>Vendredi</span>
-            <span>9:00 - 18:00</span>
-          </li>
-          <li class="list-group-item">
-            <span>Samedi</span>
-            <span>9:00 - 18:00</span>
-          </li>
-          <li class="list-group-item">
-            <span>Dimanche</span>
-            <span>Fermé</span>
-          </li>
-        </ul>
-      </div>
+    <div class="col-md-6 wow fadeIn" data-wow-delay="0.3s">
+    <h1 class="display-6 text-white mb-5">Heures de Visite <span  class="small-text"><?php echo "Semaine du {$dateDebut} au {$dateFin}."; ?></span></h1>
+    <ul class="list-group list-group-flush">
+    <?php foreach ($heuresVisite as $visite): ?>
+    <li class="list-group-item">
+        <span>
+            <?= htmlspecialchars($visite['jour']) . ' (' . ($datesSemaine[$visite['jour']] ?? '') . ')' ?>
+        </span>
+        <span>
+            <?php 
+            // Vérifie si le jour est fermé
+            if ($visite['ferme']) {
+                echo 'Fermé';
+            } else {
+                // Affiche les heures d'ouverture et de fermeture
+                echo htmlspecialchars($visite['ouverture']) . ' - ' . htmlspecialchars($visite['fermeture']);
+            }
+            ?>
+        </span>
+    </li>
+<?php endforeach; ?>
+
+    </ul>
+</div>
       <div class="col-md-6 text-light wow fadeIn" data-wow-delay="0.5s">
         <h1 class="display-6 text-white mb-5">Informations de Contact</h1>
         <table class="table">
           <tbody>
             <tr>
               <td>Bureau</td>
-              <td>123 Rue, New York, USA</td>
+              <td>123 Rue, Rennes, France</td>
             </tr>
             <tr>
               <td>Zoo</td>
-              <td>123 Rue, New York, USA</td>
+              <td>123 Rue, Rennes, France</td>
             </tr>
             <tr>
               <td>Billetterie</td>
               <td>
                 <p class="mb-2">+012 345 6789</p>
-                <p class="mb-0">billetterie@example.com</p>
+                <p class="mb-0">billetterie@ZooArcadia.com</p>
               </td>
             </tr>
             <tr>
               <td>Support</td>
               <td>
                 <p class="mb-2">+012 345 6789</p>
-                <p class="mb-0">support@example.com</p>
+                <p class="mb-0">support@ZooArcadia.com</p>
               </td>
             </tr>
           </tbody>
