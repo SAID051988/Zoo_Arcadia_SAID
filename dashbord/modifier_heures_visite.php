@@ -57,19 +57,19 @@ $jours = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <tbody>
                                                 <?php foreach ($jours as $jour): ?>
                                                     <tr>
-                                                    <td><?= htmlspecialchars($jour['jour'] ?? '') ?></td>
+                                                        <td><?= htmlspecialchars($jour['jour']) ?></td>
                                                         <td>
                                                             <div class="input-group">
                                                                 <span class="input-group-text"><i class="fa fa-clock"></i></span>
                                                                 <input type="time" class="form-control" name="jours[<?= $jour['id'] ?>][ouverture]"
-                                                                value="<?= htmlspecialchars($jour['ouverture'] ?? '') ?>">
+                                                                    value="<?= htmlspecialchars($jour['ouverture']) ?>">
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-group">
                                                                 <span class="input-group-text"><i class="fa fa-clock"></i></span>
                                                                 <input type="time" class="form-control" name="jours[<?= $jour['id'] ?>][fermeture]"
-                                                                value="<?= htmlspecialchars($jour['fermeture'] ?? '') ?>">
+                                                                    value="<?= htmlspecialchars($jour['fermeture']) ?>">
                                                             </div>
                                                         </td>
                                                         <td class="text-center">

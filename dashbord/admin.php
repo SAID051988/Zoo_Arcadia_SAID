@@ -149,14 +149,13 @@ require_once '../config.php';
         </div>
       </div>
       <!-- Column -->
-      <!-- Column -->
       <div class="col-md-6 col-lg-4 col-xlg-3">
-        <div class="card card-hover">
+        <div class="card card-hover" onclick="loadContent('statistiques_animaux.php')">
           <div class="box bg-danger text-center">
             <h1 class="font-light text-white">
               <i class="mdi mdi-receipt"></i>
             </h1>
-            <h6 class="text-white">Forms</h6>
+            <h6 class="text-white">Suivi et Analyse des Interactions avec les Animaux</h6>
           </div>
         </div>
       </div>
@@ -213,6 +212,9 @@ require_once '../config.php';
     <!-- Dynamic Content Area -->
     <div id="content">
       <h5>Le contenu chargé s'affichera ici...</h5>
+      <?php
+require_once 'statistiques_animaux.php';
+?>
     </div>
 
     <script>
@@ -287,6 +289,8 @@ require_once '../config.php';
           attachModifierHeuresVisiteHandler();
         } else if (pageUrl.includes('gerer_service.php')) {
           attachGererServicePageHandler();
+        }else if (pageUrl.includes('statistiques_animaux.php')) {
+          attachStatistiquesPageHandler();
         }
         // Ajouter ici d'autres cas pour vos pages spécifiques
       })
@@ -336,6 +340,27 @@ require_once '../config.php';
       });
     }
   }
+function attachStatistiquesPageHandler() {
+    const form = document.querySelector("form");
+    if (form) {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        fetch("statistiques_animaux.php", {
+          method: "POST",
+          body: formData,
+        })
+          .then(response => response.text())
+          .then(updatedHtml => {
+            document.getElementById('content').innerHTML = updatedHtml;
+          })
+          .catch(error => {
+            alert("Erreur lors de l'envoi : " + error.message);
+          });
+      });
+    }
+  }
+  
 </script>
 
 

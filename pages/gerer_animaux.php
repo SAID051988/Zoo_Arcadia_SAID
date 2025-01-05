@@ -89,17 +89,17 @@ $races = $raceQuery->fetchAll(PDO::FETCH_ASSOC);
           <td><?= htmlspecialchars($animal['id_race']) ?></td>
           <td>
             <img src="<?= htmlspecialchars(BASE_IMAGE_PATH . $animal['image_path']) ?>" alt="Image" class="table-image"
-              onclick="openModal('<?= htmlspecialchars(BASE_IMAGE_PATH . $animal['image_path']) ?>')">
+              data-id="<?= htmlspecialchars($animal['id_animal']) ?>"
+              onclick="openModal('<?= htmlspecialchars(BASE_IMAGE_PATH . $animal['image_path']) ?>', <?= htmlspecialchars($animal['id_animal']) ?>)">
           </td>
+
           <td>
             <a href="javascript:void(0);" class="text-warning edit-btn" data-id="<?= $animal['id_animal'] ?>"><i
                 class="fas fa-edit fa-lg"></i></a>
 
-                <a href="javascript:void(0);" 
-   class="text-danger btn-delete" 
-   data-id="<?= $animal['id_animal'] ?>">
-  <i class="fas fa-trash-alt fa-lg"></i>
-</a>
+            <a href="javascript:void(0);" class="text-danger btn-delete" data-id="<?= $animal['id_animal'] ?>">
+              <i class="fas fa-trash-alt fa-lg"></i>
+            </a>
 
             <a href="#" class="text-primary" onclick="showAnimalDetails(<?= $animal['id_animal'] ?>)">
               <i class="fas fa-info-circle fa-lg"></i>
@@ -196,7 +196,7 @@ $races = $raceQuery->fetchAll(PDO::FETCH_ASSOC);
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Image de l'animal</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <img id="modalImage" class="img-fluid" src="" alt="">
@@ -205,77 +205,78 @@ $races = $raceQuery->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 
+
   <!-- Modal pour modifier un animal -->
-<div class="modal fade" id="editAnimalModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modifier un Animal</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="editAnimalForm" enctype="multipart/form-data">
-          <input type="hidden" id="editAnimalId" name="id_animal">
+  <div class="modal fade" id="editAnimalModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifier un Animal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editAnimalForm" enctype="multipart/form-data">
+            <input type="hidden" id="editAnimalId" name="id_animal">
 
-          <!-- Première ligne avec deux colonnes -->
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="mb-3">
-                <label for="editNomAnimal" class="form-label">Nom</label>
-                <input type="text" class="form-control" id="editNomAnimal" name="nomAnimal" required>
+            <!-- Première ligne avec deux colonnes -->
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label for="editNomAnimal" class="form-label">Nom</label>
+                  <input type="text" class="form-control" id="editNomAnimal" name="nomAnimal" required>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label for="editHabitatAnimal" class="form-label">Habitat</label>
+                  <select id="editHabitatAnimal" name="habitat" class="form-select" required>
+                    <?php foreach ($habitats as $habitat): ?>
+                      <option value="<?= htmlspecialchars($habitat['id_habitat']) ?>">
+                        <?= htmlspecialchars($habitat['nom_habitat']) ?>
+                      </option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
               </div>
             </div>
-            <div class="col-lg-6">
-              <div class="mb-3">
-                <label for="editHabitatAnimal" class="form-label">Habitat</label>
-                <select id="editHabitatAnimal" name="habitat" class="form-select" required>
-                  <?php foreach ($habitats as $habitat): ?>
-                    <option value="<?= htmlspecialchars($habitat['id_habitat']) ?>">
-                      <?= htmlspecialchars($habitat['nom_habitat']) ?>
-                    </option>
-                  <?php endforeach; ?>
-                </select>
+
+            <!-- Deuxième ligne avec deux colonnes -->
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label for="editRaceAnimal" class="form-label">Race</label>
+                  <select id="editRaceAnimal" name="race" class="form-select" required>
+                    <?php foreach ($races as $race): ?>
+                      <option value="<?= htmlspecialchars($race['id_race']) ?>">
+                        <?= htmlspecialchars($race['nom_race']) ?>
+                      </option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label for="editStatusAnimal" class="form-label">Statut</label>
+                  <input type="text" class="form-control" id="editStatusAnimal" name="status" required>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Deuxième ligne avec deux colonnes -->
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="mb-3">
-                <label for="editRaceAnimal" class="form-label">Race</label>
-                <select id="editRaceAnimal" name="race" class="form-select" required>
-                  <?php foreach ($races as $race): ?>
-                    <option value="<?= htmlspecialchars($race['id_race']) ?>">
-                      <?= htmlspecialchars($race['nom_race']) ?>
-                    </option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
+            <!-- Ligne pour le téléchargement de l'image -->
+            <div class="mb-3">
+              <label for="editImageUpload" class="form-label">Télécharger une nouvelle image</label>
+              <input type="file" class="form-control" id="editImageUpload" name="image" accept=".jpg,.jpeg,.png,.gif">
             </div>
-            <div class="col-lg-6">
-              <div class="mb-3">
-                <label for="editStatusAnimal" class="form-label">Statut</label>
-                <input type="text" class="form-control" id="editStatusAnimal" name="status" required>
-              </div>
+
+            <!-- Bouton pour soumettre le formulaire -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
             </div>
-          </div>
-
-          <!-- Ligne pour le téléchargement de l'image -->
-          <div class="mb-3">
-            <label for="editImageUpload" class="form-label">Télécharger une nouvelle image</label>
-            <input type="file" class="form-control" id="editImageUpload" name="image" accept=".jpg,.jpeg,.png,.gif">
-          </div>
-
-          <!-- Bouton pour soumettre le formulaire -->
-          <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 
   <!-- Modale Détails Animal -->
@@ -312,11 +313,30 @@ $races = $raceQuery->fetchAll(PDO::FETCH_ASSOC);
 
   <script>
     // Fonction pour afficher l'image en grand dans le modal
-    function openModal(imagePath) {
-      document.getElementById("modalImage").src = imagePath;
-      var myModal = new bootstrap.Modal(document.getElementById('animalModal'), {});
-      myModal.show();
-    }
+function openModal(imagePath, idAnimal) {
+    document.getElementById("modalImage").src = imagePath;
+    
+    // Appeler la fonction pour incrémenter le compteur de vues
+    incrementViewCount(idAnimal);
+    
+    var myModal = new bootstrap.Modal(document.getElementById('animalModal'), {});
+    myModal.show();
+}
+
+// Fonction pour incrémenter le compteur de vues
+function incrementViewCount(idAnimal) {
+    fetch(`increment_view.php?id_animal=${idAnimal}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Compteur de vues incrémenté avec succès !");
+            } else {
+                console.error("Erreur lors de l'incrémentation : " + data.message);
+            }
+        })
+        .catch(error => console.error("Erreur réseau :", error));
+}
+
 
     // Mettre à jour le chemin de l'image lors de la sélection d'un fichier
     document.getElementById('imageUpload').addEventListener('change', function () {
@@ -446,28 +466,28 @@ $races = $raceQuery->fetchAll(PDO::FETCH_ASSOC);
     }
   </script>
   <script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Gestion du clic sur le bouton supprimer
-  document.querySelectorAll('.btn-delete').forEach(button => {
-    button.addEventListener('click', function () {
-      const idAnimal = this.getAttribute('data-id');
-      if (confirm('Êtes-vous sûr de vouloir supprimer cet animal ?')) {
-        fetch(`supprimer_animal.php?id=${idAnimal}`, { method: 'GET' })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              alert('Animal supprimé avec succès.');
-              // Actualiser la table dynamiquement
-              document.querySelector(`#animal-row-${idAnimal}`).remove();
-            } else {
-              alert('Erreur lors de la suppression de l\'animal.');
-            }
-          })
-          .catch(err => console.error('Erreur AJAX:', err));
-      }
+    document.addEventListener('DOMContentLoaded', () => {
+      // Gestion du clic sur le bouton supprimer
+      document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function () {
+          const idAnimal = this.getAttribute('data-id');
+          if (confirm('Êtes-vous sûr de vouloir supprimer cet animal ?')) {
+            fetch(`supprimer_animal.php?id=${idAnimal}`, { method: 'GET' })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  alert('Animal supprimé avec succès.');
+                  // Actualiser la table dynamiquement
+                  document.querySelector(`#animal-row-${idAnimal}`).remove();
+                } else {
+                  alert('Erreur lors de la suppression de l\'animal.');
+                }
+              })
+              .catch(err => console.error('Erreur AJAX:', err));
+          }
+        });
+      });
     });
-  });
-});
 
 
   </script>
