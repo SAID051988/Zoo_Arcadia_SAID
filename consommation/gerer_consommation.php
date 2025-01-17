@@ -1,7 +1,7 @@
 <?php
-/*include("../pagesParametres/beforeHeader.php");
+include("../pagesParametres/beforeHeader.php");
 include("../pagesParametres/navbar.php");
-include("../pagesParametres/header-page.php");*/
+include("../pagesParametres/header-page.php");
 require_once '../dbconnect.php';
 require_once '../config.php';
 
@@ -10,24 +10,26 @@ $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $start = ($page - 1) * $limit;
 $searchTerm = isset($_GET['search']) ? '%' . $_GET['search'] . '%' : '%';
 
-// Requête pour récupérer les consommations avec le filtre de recherche et pagination
+$searchTermWithWildcard = "%{$searchTerm}%";
 $query = $pdo->prepare("SELECT c.*, a.nom_animal AS nom_animal, n.nom AS nom_nourriture
                         FROM consommation c
                         JOIN animal a ON c.id_animal = a.id_animal
                         JOIN nourriture n ON c.id_nourriture = n.id_nourriture
-                        WHERE a.nom_animal LIKE :searchTerm OR n.nom LIKE :searchTerm
-                        ");
+                        WHERE a.nom_animal LIKE :searchTerm1 OR n.nom LIKE :searchTerm2");
 
-$query->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+$query->bindParam(':searchTerm1', $searchTermWithWildcard, PDO::PARAM_STR);
+$query->bindParam(':searchTerm2', $searchTermWithWildcard, PDO::PARAM_STR);
 $query->execute();
+
 $consommations = $query->fetchAll();
 
 // Calcul du nombre total de consommations pour la pagination
 $totalQuery = $pdo->prepare("SELECT COUNT(*) FROM consommation c
                              JOIN animal a ON c.id_animal = a.id_animal
                              JOIN nourriture n ON c.id_nourriture = n.id_nourriture
-                             WHERE a.nom LIKE :searchTerm OR n.nom LIKE :searchTerm");
-$totalQuery->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+                             WHERE a.nom_animal LIKE :searchTerm1 OR n.nom LIKE :searchTerm2");
+$totalQuery->bindParam(':searchTerm1', $searchTermWithWildcard, PDO::PARAM_STR);
+$totalQuery->bindParam(':searchTerm2', $searchTermWithWildcard, PDO::PARAM_STR);
 $totalQuery->execute();
 $total = $totalQuery->fetchColumn();
 $pages = ceil($total / $limit);
@@ -87,7 +89,7 @@ $pages = ceil($total / $limit);
         <td><?= $consommation['date'] ?></td>
         <td><?= $consommation['heure'] ?></td>
         <td><?= $consommation['grammage'] ?></td>
-        <td><?= $consommation['quantite'] ?></td>
+        
       </tr>
     <?php endforeach; ?>
     </tbody>

@@ -2,7 +2,7 @@
 session_start();
 include("../pagesParametres/beforeHeader.php");
 include("../pagesParametres/navbar.php");
-include("../pagesParametres/header.php");
+include("../pagesParametres/header-page.php");
 
 ?>
 

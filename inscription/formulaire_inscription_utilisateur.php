@@ -1,4 +1,7 @@
 <?php
+include("../pagesParametres/beforeHeader.php");
+include("../pagesParametres/navbar.php");
+include("../pagesParametres/header-page.php");
 require_once '../dbconnect.php';
 header('Content-Type: application/json'); // Réponse au format JSON
 session_start();
@@ -68,4 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
        echo json_encode(['success' => false, 'errors' => ['general' => "Erreur : " . $e->getMessage()]]);
    }
 }
+?>
+<?php
+include("../pagesParametres/footer.php");
 ?>
