@@ -5,6 +5,7 @@ if(session_status()===PHP_SESSION_NONE){
  }
  require_once '../dbconnect.php';
  require_once '../config.php';
+ 
 if (isset($_POST['id']) && isset($_POST['value'])) {
     $id = $_POST['id'];
     $value = $_POST['value'];

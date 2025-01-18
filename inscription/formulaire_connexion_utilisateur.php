@@ -18,7 +18,7 @@ include("../pagesParametres/header-page.php");
                                 <div class="input-group mb-2">
                                     <span class="input-group-text"><i class="fa fa-user"></i></span>
                                     <input type="tel" class="form-control rounded-left" id="identifiant_utilisateur"
-                                        name="identifiant_utilisateur" placeholder="Username" >
+                                        name="identifiant_utilisateur" placeholder="Username">
                                 </div>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text"><i class="fa fa-lock"></i></span>
@@ -39,7 +39,8 @@ include("../pagesParametres/header-page.php");
                                 </div>
                                 <div class="form-group mt-4">
                                     <div class="w-100 text-center">
-                                        <p class="mb-1">Vous n'avez pas de compte ? <a href="inscription.php">Inscrivez-vous</a></p>
+                                        <p class="mb-1">Vous n'avez pas de compte ? <a
+                                                href="inscription.php">Inscrivez-vous</a></p>
                                         <p><a href="mot_de_passe_oublie.php">Mot de passe oublié</a></p>
                                     </div>
                                 </div>
@@ -68,8 +69,20 @@ include("../pagesParametres/header-page.php");
                 dataType: "json",
                 success: function (response) {
                     if (response.success) {
-                        // Redirection en cas de succès
-                        window.location.href = "dashboard.php";
+                        // Vérifier le rôle de l'utilisateur
+                        if (response.role === "administrateur") {
+                            // Redirection pour les administrateurs
+                            window.location.href = "../espace_administrateur/admin.php";
+                        } else if (response.role === "veterinaire") {
+                            // Redirection pour les veterinaire
+                            window.location.href = "../espace_veterinaire/gerer_veterinaire_saisie.php";
+                        } else if (response.role === "employe") {
+                            // Redirection pour les employés
+                            window.location.href = "../espace_employe/espace_employe.php";
+                        } else {
+                            // Redirection par défaut si un autre rôle existe
+                            window.location.href = "../dashboard/general.php";
+                        }
                     } else {
                         $('.invalid-feedback').remove();
                         $("input").removeClass("is-invalid");

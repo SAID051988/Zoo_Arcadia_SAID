@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION['user_role'] = $user['role_utilisateur'];
                 $_SESSION['user_name'] = $user['prenom_utilisateur'] . ' ' . $user['nom_utilisateur'];
 
-                echo json_encode(['success' => true, 'message' => "Connexion réussie."]);
+                echo json_encode(['success' => true, 'message' => "Connexion réussie.",'role' => $user['role_utilisateur'] ]);
             } else {
                 echo json_encode(['success' => false, 'errors' => ['general' => "Mot de passe incorrect."]]);
             }

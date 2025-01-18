@@ -1,8 +1,15 @@
 <?php
-include("../pagesParametres/beforeHeader.php");
-?>
+session_start();
 
-<?php
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'administrateur') {
+    header('Location: ../inscription/formulaire_connexion_utilisateur.php');
+    exit();
+}
+
+
+
+include("../pagesParametres/beforeHeader.php");
+
 require_once '../dbconnect.php';
 require_once '../config.php';
 ?>

@@ -1,4 +1,10 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'veterinaire') {
+    header('Location: ../inscription/formulaire_connexion_utilisateur.php');
+    exit();
+}
 include("../pagesParametres/beforeHeader.php");
 include("../pagesParametres/navbar.php");
 include("../pagesParametres/header-page.php");
