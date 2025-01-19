@@ -75,7 +75,7 @@ include("../pagesParametres/header-page.php");
                             window.location.href = "../espace_administrateur/admin.php";
                         } else if (response.role === "veterinaire") {
                             // Redirection pour les veterinaire
-                            window.location.href = "../espace_veterinaire/gerer_veterinaire_saisie.php";
+                            window.location.href = "../espace_veterinaire/espace_veterinaire.php";
                         } else if (response.role === "employe") {
                             // Redirection pour les employés
                             window.location.href = "../espace_employe/espace_employe.php";
