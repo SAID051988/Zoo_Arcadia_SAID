@@ -1,9 +1,19 @@
 <?php
-include("../pagesParametres/beforeHeader.php");
-include("../pagesParametres/navbar.php");
-include("../pagesParametres/header-page.php");
-require_once '../dbconnect.php';
-require_once '../config.php';
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'administrateur') {
+  header('Location: ../inscription/formulaire_connexion_utilisateur.php');
+  exit();
+}
+include("../espace_administrateur/espace_administrateur.php");
+
+
+// include("../pagesParametres/beforeHeader.php");
+// include("../pagesParametres/navbar.php");
+// include("../pagesParametres/header-page.php");
+//require_once '../dbconnect.php';
+//require_once '../config.php';
 
 $limit = 5; // Nombre d'habitats par page
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -44,7 +54,16 @@ $pages = ceil($total / $limit);
   }
 </style>
 
-<div class="container mt-5">
+<section class="statistiques">
+    <div class="mask d-flex align-items-center h-100 gradient-custom">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-12 col-xl-9">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-4 p-md-5">
+
+
+
   <div class="d-flex justify-content-between mb-3">
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHabitatModal">Ajouter un Habitat</button>
     <form class="d-flex">
@@ -583,6 +602,12 @@ function openModal(event) {
 </script>
 
 </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 <?php

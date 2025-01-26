@@ -16,8 +16,6 @@ require_once '../config.php';
 // include("../pagesParametres/navbar.php");
 // include("../pagesParametres/header-page.php");
 
-
-
 // Pagination
 $limit = 6;
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -50,9 +48,6 @@ $totalStmt = $pdo->query("SELECT COUNT(*) FROM veterinaire_saisie");
 $totalRows = $totalStmt->fetchColumn();
 $totalPages = ceil($totalRows / $limit);
 ?>
-<!-- CSS DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-
 
 <style>
     .text-primary {
@@ -61,47 +56,39 @@ $totalPages = ceil($totalRows / $limit);
     }
 </style>
 
-<section class="intro">
-    <div class="mask d-flex align-items-center h-100 gradient-custom">
-        <div class="container-fluid mt-5">
-            <div class="row justify-content-center">
-                <div class="col-12 col-lg-12 col-xl-9">
-                    <div class="card  shadow-lg">
-                        <div class="card-body p-4 p-md-5">
+<div class="container mt-5">
 
     <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
         <h1 class="mb-5">Gestion des comptes rendus</h1>
     </div>
 
 
-<!-- Bouton pour ajouter une saisie -->
-<div class="d-flex justify-content-between mb-3">
-<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">Ajouter un compte
-rendu</button>
+    <!-- Bouton pour ajouter une saisie -->
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">Ajouter un compte
+        rendu</button>
 
-  </div>
+    <!-- Tableau des saisies -->
+    <style>
+        .table th,
+        .table td {
+            font-size: 0.8rem;
+            /* Réduit la taille de la police */
+        }
+    </style>
 
-
-
-
-
-
-    
-
-    <table class="table table-bordered rounded" id="saisieTable" 
-    class="cell-border" cellspacing="0" style="border-collapse: collapse">
+    <table class="table table-bordered" id="saisieTable">
         <thead class="table-light">
             <tr style="background-color: #555555; color: white;">
-                <th>ID</th>
-                <th>Animal</th>
-                <th>Nourriture</th>
-                <th>État animal</th>
-                <th>État habitat</th>
-                <th>à faire</th>
-                <th>Date</th>
-                <th>Détails état animal</th>
-                <th>Détails état habitat</th>
-                <th>Actions</th>
+                <th style="font-weight: bold;">ID</th>
+                <th style="font-weight: bold;">Animal</th>
+                <th style="font-weight: bold;">Nourriture</th>
+                <th style="font-weight: bold;">État animal</th>
+                <th style="font-weight: bold;">État habitat</th>
+                <th style="font-weight: bold;">à faire</th>
+                <th style=" width: 86px;white-space: nowrap;font-weight: bold;">Date</th>
+                <th style="font-weight: bold;">Détails état animal</th>
+                <th style="font-weight: bold;">Détails état habitat</th>
+                <th style=" width: 100px;white-space: nowrap;font-weight: bold;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -113,8 +100,8 @@ rendu</button>
                     <td><?= $saisie['nom_nourriture'] ?></td>
                     <td><?= $saisie['etat_animal'] ?></td>
                     <td><?= $saisie['etat_habitat'] ?></td>
-                    <td style='width: 40px;'><?= $saisie['action_nourriture'] ?></td>
-                    <td style='white-space: nowrap;'><?= $saisie['date_passage'] ?></td>
+                    <td><?= $saisie['action_nourriture'] ?></td>
+                    <td><?= $saisie['date_passage'] ?></td>
                     <td><?= $saisie['detail_etat_animal'] ?></td>
                     <td><?= $saisie['detail_etat_habitat'] ?></td>
                     <!-- <td>
@@ -127,12 +114,10 @@ rendu</button>
                         </td> -->
                     <!-- Bouton pour modifier un habitat -->
                     <td>
-                    <a href="javascript:void(0);" class="text-warning edit-btn" 
-   data-bs-toggle="modal" 
-   data-bs-target="#editModal<?= $saisie['id_saisie'] ?>" 
-   data-id="<?= $saisie['id_saisie'] ?>">
-    <i class="fas fa-edit fa-lg"></i>
-</a>
+                        <a href="javascript:void(0);" class="text-warning edit-btn" data-bs-toggle="modal"
+                            data-bs-target="#editModal<?= $saisie['id_saisie'] ?>" data-id="<?= $saisie['id_saisie'] ?>">
+                            <i class="fas fa-edit fa-lg"></i>
+                        </a>
                         <a href="javascript:void(0);" class="text-danger btn-delete" data-id="<?= $saisie['id_saisie'] ?>">
                             <i class="fas fa-trash-alt fa-lg"></i>
                         </a>
@@ -148,7 +133,20 @@ rendu</button>
         </tbody>
     </table>
 
-
+    <!-- Pagination -->
+    <nav>
+        <ul class="pagination">
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                    <a class="page-link"
+                        href="?page=<?= $i ?>&search=<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>"
+                        data-page="<?= $i ?>" onclick="loadPage(event, <?= $i ?>)">
+                        <?= $i ?>
+                    </a>
+                </li>
+            <?php endfor; ?>
+        </ul>
+    </nav>
 </div>
 
 <!-- Modal Ajouter -->
@@ -419,36 +417,10 @@ rendu</button>
 </div>
 
 
-</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 
-</div>
-</div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script>
-    var $j = jQuery.noConflict();
-    $j(document).ready(function () {
-        $j('#saisieTable').DataTable({
-            paging: true,
-            searching: true, // Si vous utilisez une barre de recherche personnalisée
-            ordering: true,
-            pageLength: 4, // Affiche 4 lignes par page
-            language: {
-                url: "../lib/json/fr-FR.json" // Traduction française
-            }
-        });
-    });
-</script>
 
 
 <?php
-include("../pagesParametres/footer.php");
+//include("../pagesParametres/footer.php");
 ?>

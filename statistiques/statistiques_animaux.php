@@ -1,6 +1,9 @@
 <?php
-require_once '../dbconnect.php';
-require_once '../config.php';
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
+include("../espace_administrateur/espace_administrateur.php");
 
 // Requête pour récupérer les données des animaux et leurs vues
 $query = $pdo->prepare("SELECT nom_animal, view_animal FROM animal");
@@ -71,3 +74,7 @@ $animalData = $query->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </section>
+
+<?php
+include("../pagesParametres/footer.php");
+?>

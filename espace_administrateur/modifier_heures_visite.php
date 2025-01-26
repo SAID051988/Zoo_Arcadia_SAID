@@ -1,7 +1,9 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
 
-require_once '../dbconnect.php';
-require_once '../config.php';
+include("../espace_administrateur/espace_administrateur.php");
 
 
 // Gestion de la soumission du formulaire
@@ -91,3 +93,7 @@ $jours = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </section>
+
+    <?php
+include("../pagesParametres/footer.php");
+?>

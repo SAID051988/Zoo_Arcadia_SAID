@@ -1,10 +1,15 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
 
-include("../pagesParametres/beforeHeader.php");
-include("../pagesParametres/navbar.php");
-include("../pagesParametres/header.php");
-require_once '../dbconnect.php';
-require_once '../config.php';
+include("../espace_administrateur/espace_administrateur.php");
+
+// include("../pagesParametres/beforeHeader.php");
+// include("../pagesParametres/navbar.php");
+// include("../pagesParametres/header.php");
+// require_once '../dbconnect.php';
+// require_once '../config.php';
 
 $limit = 5; // Nombre d'éléments par page
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -26,14 +31,24 @@ $total = $totalQuery->fetchColumn();
 $pages = ceil($total / $limit);
 
 ?>
-<div class="container mt-5">
+<section class="statistiques">
+    <div class="mask d-flex align-items-center h-100 gradient-custom">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-12 col-xl-9">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-4 p-md-5">
+
+
+
+
   <div class="d-flex justify-content-between mb-3">
   <?php
 if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === "Administrateur") {
   ?>
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDataModal">Ajouter un élément</button>
   <?php } ?>
-    <form class="d-flex">
+    <form class="d-flex  ms-auto">
       <input class="form-control me-2" name="search" type="search" placeholder="Rechercher..." 
         value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>" 
         onchange="window.location.href='?search=' + encodeURIComponent(this.value)">
@@ -120,6 +135,17 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === "Administrateur"
     </div>
   </div>
 </div>
+
+
+
+
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <?php
 include("../pagesParametres/footer.php");
 ?>

@@ -38,7 +38,7 @@ session_start();
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-2">
-                                        <label for="email_utilisateur" class="form-label">Email</label>
+                                        <label for="email_utilisateur" class="form-label">Identifiant (Email)</label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="fa fa-envelope"></i></span>
                                             <input type="email" class="form-control" id="email_utilisateur"
@@ -47,8 +47,7 @@ session_start();
 
                                     </div>
                                     <div class="col-md-6 mb-2">
-                                        <label for="repeter_email_utilisateur" class="form-label">Confirmer
-                                            Email</label>
+                                        <label for="repeter_email_utilisateur" class="form-label">Confirmer votre identifiant (Email)</label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="fa fa-envelope"></i></span>
                                             <input type="email" class="form-control" id="repeter_email_utilisateur"

@@ -72,7 +72,7 @@ include("../pagesParametres/header-page.php");
                         // Vérifier le rôle de l'utilisateur
                         if (response.role === "administrateur") {
                             // Redirection pour les administrateurs
-                            window.location.href = "../espace_administrateur/admin.php";
+                            window.location.href = "../espace_administrateur/espace_administrateur.php";
                         } else if (response.role === "veterinaire") {
                             // Redirection pour les veterinaire
                             window.location.href = "../espace_veterinaire/espace_veterinaire.php";

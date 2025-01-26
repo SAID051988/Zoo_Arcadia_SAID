@@ -165,7 +165,7 @@ require_once 'dbconnect.php';
  FROM animal a
  LEFT JOIN habitats h ON a.id_habitat = h.id_habitat
  LEFT JOIN races r ON a.id_race = r.id_race
-";
+limit 12";
 $stmt = $pdo->query($query);
 $animaux = $stmt->fetchAll(PDO::FETCH_ASSOC);
  ?>

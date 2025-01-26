@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
 
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'administrateur') {
   header('Location: ../inscription/formulaire_connexion_utilisateur.php');
@@ -10,8 +12,8 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'administrateur
 
 include("../pagesParametres/beforeHeader.php");
 
-require_once '../dbconnect.php';
-require_once '../config.php';
+// require_once '../dbconnect.php';
+// require_once '../config.php';
 ?>
 
 <link href="../lib/dashboard/float-chart.css" rel="stylesheet" />
@@ -99,17 +101,6 @@ require_once '../config.php';
       <!-- ============================================================== -->
       <div class="row">
         <!-- Column -->
-        <div class="col-md-6 col-lg-2 col-xlg-3">
-          <div class="card card-hover" onclick="loadContent('modifier_heures_visite.php')">
-            <div class="box bg-cyan text-center">
-              <h1 class="font-light text-white">
-                <i class="mdi mdi-calendar-check"></i>
-              </h1>
-              <h6 class="text-white">Heures de visite</h6>
-            </div>
-          </div>
-        </div>
-        <!-- Column -->
         <div class="col-md-6 col-lg-4 col-xlg-3">
           <div class="card card-hover" onclick="loadContent('inscription.php')">
             <div class="box bg-success text-center">
@@ -122,7 +113,7 @@ require_once '../config.php';
         </div>
         <!-- Column -->
         <div class="col-md-6 col-lg-2 col-xlg-3">
-          <div class="card card-hover" onclick="loadContent('gerer_service.php')">
+          <div class="card card-hover"  onclick="window.location.href='../services/gerer_service.php';" style="cursor: pointer;">
             <div class="box bg-warning text-center">
               <h1 class="font-light text-white">
                 <i class="mdi mdi-collage"></i>
@@ -133,15 +124,29 @@ require_once '../config.php';
         </div>
         <!-- Column -->
         <div class="col-md-6 col-lg-2 col-xlg-3">
-          <div class="card card-hover">
-            <div class="box bg-danger text-center">
+          <div class="card card-hover" onclick="window.location.href='../espace_administrateur/modifier_heures_visite.php';" style="cursor: pointer;">
+            <div class="box bg-cyan text-center">
               <h1 class="font-light text-white">
-                <i class="mdi mdi-border-outside"></i>
+                <i class="mdi mdi-calendar-check"></i>
               </h1>
-              <h6 class="text-white">Tables</h6>
+              <h6 class="text-white">Heures de visite</h6>
             </div>
           </div>
         </div>
+
+        
+         
+        <!-- Column -->
+<div class="col-md-6 col-lg-2 col-xlg-3">
+  <div class="card card-hover" onclick="window.location.href='../habitats/gerer_habitats.php';" style="cursor: pointer;">
+    <div class="box bg-danger text-center">
+      <h1 class="font-light text-white">
+        <i class="mdi mdi-border-outside"></i>
+      </h1>
+      <h6 class="text-white">Gérer les habitats</h6>
+    </div>
+  </div>
+</div>
         <!-- Column -->
         <div class="col-md-6 col-lg-2 col-xlg-3">
           <div class="card card-hover">
@@ -223,60 +228,68 @@ require_once '../config.php';
       </div>
 
       <script>
-        function loadContent(pageUrl) {
-          const contentDiv = document.getElementById('content');
-          fetch(pageUrl)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Erreur lors du chargement de la page');
-              }
-              return response.text();
-            })
-            .then(html => {
-              contentDiv.innerHTML = html;
+        // function loadContent(pageUrl) {
+        //   const contentDiv = document.getElementById('content');
+        //   fetch(pageUrl)
+        //     .then(response => {
+        //       if (!response.ok) {
+        //         throw new Error('Erreur lors du chargement de la page');
+        //       }
+        //       return response.text();
+        //     })
+        //     .then(html => {
+        //       contentDiv.innerHTML = html;
 
-              // Réattacher les événements au formulaire chargé dynamiquement
-              const form = contentDiv.querySelector("form");
-              if (form) {
-                form.addEventListener("submit", function (e) {
-                  e.preventDefault(); // Empêche le rechargement de la page
-                  const formData = new FormData(form);
+        //       // Réattacher les événements au formulaire chargé dynamiquement
+        //       const form = contentDiv.querySelector("form");
+        //       if (form) {
+        //         form.addEventListener("submit", function (e) {
+        //           e.preventDefault(); // Empêche le rechargement de la page
+        //           const formData = new FormData(form);
 
-                  fetch("formulaire_inscription_utilisateur.php", {
-                    method: "POST",
-                    body: formData,
-                  })
-                    .then(response => response.json())
-                    .then(data => {
-                      if (data.success) {
-                        alert("Inscription réussie !");
-                        form.reset();
-                      } else {
-                        // Afficher les erreurs
-                        for (const [field, message] of Object.entries(data.errors)) {
-                          const input = form.querySelector(`#${field}`);
-                          if (input) {
-                            input.classList.add("is-invalid");
-                            input.insertAdjacentHTML(
-                              "afterend",
-                              `<div class="invalid-feedback">${message}</div>`
-                            );
-                          }
-                        }
-                      }
-                    })
-                    .catch(error => {
-                      alert("Erreur : " + error.message);
-                    });
-                });
-              }
-            })
-            .catch(error => {
-              contentDiv.innerHTML = `<p class="text-danger">${error.message}</p>`;
-            });
-        }
+        //           fetch("formulaire_inscription_utilisateur.php", {
+        //             method: "POST",
+        //             body: formData,
+        //           })
+        //             .then(response => response.json())
+        //             .then(data => {
+        //               if (data.success) {
+        //                 alert("Inscription réussie !");
+        //                 form.reset();
+        //               } else {
+        //                 // Afficher les erreurs
+        //                 for (const [field, message] of Object.entries(data.errors)) {
+        //                   const input = form.querySelector(`#${field}`);
+        //                   if (input) {
+        //                     input.classList.add("is-invalid");
+        //                     input.insertAdjacentHTML(
+        //                       "afterend",
+        //                       `<div class="invalid-feedback">${message}</div>`
+        //                     );
+        //                   }
+        //                 }
+        //               }
+        //             })
+        //             .catch(error => {
+        //               alert("Erreur : " + error.message);
+        //             });
+        //         });
+        //       }
+        //     })
+        //     .catch(error => {
+        //       contentDiv.innerHTML = `<p class="text-danger">${error.message}</p>`;
+        //     });
+        // }
       </script>
-      <script>
+
+
+
+
+
+
+
+
+<script>
         function loadContent(pageUrl) {
           const contentDiv = document.getElementById('content');
           fetch(pageUrl)
@@ -290,15 +303,17 @@ require_once '../config.php';
               contentDiv.innerHTML = html;
 
               // Ajouter des comportements spécifiques selon la page
-              if (pageUrl.includes('modifier_heures_visite.php')) {
-                attachModifierHeuresVisiteHandler();
-              } else if (pageUrl.includes('gerer_service.php')) {
-                attachGererServicePageHandler();
-              } else if (pageUrl.includes('statistiques_animaux.php')) {
-                attachStatistiquesPageHandler();
-              }
-              // Ajouter ici d'autres cas pour vos pages spécifiques
-            })
+          if (pageUrl.includes('modifier_heures_visite.php')) {
+            attachModifierHeuresVisiteHandler();
+          } else if (pageUrl.includes('gerer_service.php')) {
+            attachGererServicePageHandler();
+          } else if (pageUrl.includes('statistiques_animaux.php')) {
+            attachStatistiquesPageHandler();
+          } else if (pageUrl.includes('inscription.php')) {
+            attachFormulaireInscriptionHandler();
+          }
+          // Ajouter ici d'autres cas pour vos pages spécifiques
+        })
             .catch(error => {
               contentDiv.innerHTML = `<p class="text-danger">${error.message}</p>`;
             });
@@ -325,13 +340,13 @@ require_once '../config.php';
           }
         }
 
-        function attachGererServicePageHandler() {
+        function  attachGererServicePageHandler() {
           const form = document.querySelector("form");
           if (form) {
             form.addEventListener("submit", function (e) {
               e.preventDefault();
               const formData = new FormData(form);
-              fetch("gerer_services.php", {
+              fetch("gerer_service.php", {
                 method: "POST",
                 body: formData,
               })
@@ -345,6 +360,7 @@ require_once '../config.php';
             });
           }
         }
+
         function attachStatistiquesPageHandler() {
           const form = document.querySelector("form");
           if (form) {
@@ -366,6 +382,58 @@ require_once '../config.php';
           }
         }
 
+        function attachFormulaireInscriptionHandler() {
+          const form = document.querySelector("form");
+          if (form) {
+            form.addEventListener("submit", function (e) {
+              e.preventDefault(); // Empêche le rechargement de la page
+              const formData = new FormData(form);
+
+              fetch("formulaire_inscription_utilisateur.php", {
+                method: "POST",
+                body: formData,
+              })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.success) {
+                    alert("Inscription réussie !");
+                    form.reset();
+                  } else {
+                    // Afficher les erreurs
+                    for (const [field, message] of Object.entries(data.errors)) {
+                      const input = form.querySelector(`#${field}`);
+                      if (input) {
+                        input.classList.add("is-invalid");
+                        input.insertAdjacentHTML(
+                          "afterend",
+                          `<div class="invalid-feedback">${message}</div>`
+                        );
+                      }
+                    }
+                  }
+                })
+                .catch(error => {
+                  alert("Erreur : " + error.message);
+                });
+            });
+          }
+        }
+
+        function attachPaginationHandlers() {
+          document.addEventListener('click', function (e) {
+            if (e.target.closest('.pagination a')) {
+              e.preventDefault(); // Empêche le comportement par défaut du lien
+              const url = e.target.getAttribute('href'); // Récupère l'URL du lien
+              loadContent(url); // Charge la page via fetch
+            }
+          });
+        }
+
+        // Attacher les gestionnaires d'événements au chargement initial de la page
+        document.addEventListener('DOMContentLoaded', function () {
+          attachPageSpecificHandlers(window.location.href);
+          attachPaginationHandlers();
+        });
       </script>
 
 
@@ -401,12 +469,35 @@ require_once '../config.php';
   <!-- ============================================================== -->
 </div>
 </div>
-<!-- ============================================================== -->
-<!-- End Wrapper -->
-<!-- ============================================================== -->
-<!-- ============================================================== -->
-<!-- All Jquery -->
-<!-- ============================================================== -->
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>function loadPage(event, page) {
+    event.preventDefault(); // Empêche le rechargement de la page
+    const searchParam = new URLSearchParams(window.location.search).get('search') || '';
+    const url = `gerer_service.php?page=${page}&search=${encodeURIComponent(searchParam)}`;
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erreur lors du chargement de la page');
+        }
+        return response.text();
+      })
+      .then(html => {
+        document.getElementById('content').innerHTML = html;
+        attachGererServicePageHandler(); // Réattachez les événements nécessaires
+      })
+      .catch(error => {
+        alert("Erreur pour : " + error.message);
+      });
+  }
+</script>
+
+
+
+
+
+
 <script src="../lib/dashboard/jquery.min.js"></script>
 <!-- Bootstrap tether Core JavaScript -->
 <script src="../lib/dashboard/bootstrap.bundle.min.js"></script>
