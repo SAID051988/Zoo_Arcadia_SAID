@@ -169,7 +169,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
         <!-- Column -->
         <div class="col-md-6 col-lg-2 col-xlg-3">
-        <div class="card card-hover <?php echo $currentPage === 'espace_veterinaire.php' ? 'active-card' : ''; ?>"
+        <div class="card card-hover <?php echo $currentPage === 'gerer_veterinaire_saisie.php' ? 'active-card' : ''; ?>"
         onclick="window.location.href='../espace_veterinaire/gerer_veterinaire_saisie.php';" style="cursor: pointer;">
             <div class="box bg-info text-center">
               <h1 class="font-light text-white">

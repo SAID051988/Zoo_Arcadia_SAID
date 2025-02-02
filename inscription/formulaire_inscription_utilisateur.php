@@ -72,8 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $message .= "Mot de passe : Contacter l'Administrateur pour récupérer votre mot de passe" ."\n\n";
         $message .= "Cordialement,\nL'équipe de gestion.";
 
-        $headers = "From: hajjriadh@gmail.com\r\n";
-        $headers .= "Reply-To: hajjriadh@gmail.com\r\n";
+        $headers = "From: saidmohamed.fayez88@gmail.com\r\n";
+        $headers .= "Reply-To: saidmohamed.fayez88@gmail.com\r\n";
         $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
         // Envoyer l'e-mail avec Sendmail

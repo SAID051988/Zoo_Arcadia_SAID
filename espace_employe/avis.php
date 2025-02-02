@@ -35,7 +35,7 @@ require_once '../config.php';
                     //Appeler la page connexion.php
                     require_once '../dbconnect.php';
                     // Traitement des avis des clients
-                    $statement_avis=$pdo->prepare("select * from avis where valider_avis=0");
+                    $statement_avis=$pdo->prepare("select * from avis");// where valider_avis=0
                     $statement_avis->execute();
                     // Récupération des résultats de la requête
                     $row_avis = $statement_avis->fetchAll(PDO::FETCH_ASSOC);

@@ -42,7 +42,7 @@ $jours = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <h2 class="text-center text-primary">Modifier les heures de visite</h2>
                                 <?php if (isset($message)): ?>
                                     <div class="alert alert-success text-center">
-                                        <?= htmlspecialchars($message) ?>
+                                        <?= $message ?>
                                     </div>
                                 <?php endif; ?>
                                 <form method="post">
@@ -59,19 +59,19 @@ $jours = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <tbody>
                                                 <?php foreach ($jours as $jour): ?>
                                                     <tr>
-                                                        <td><?= htmlspecialchars($jour['jour']) ?></td>
+                                                        <td><?= $jour['jour'] ?></td>
                                                         <td>
                                                             <div class="input-group">
                                                                 <span class="input-group-text"><i class="fa fa-clock"></i></span>
                                                                 <input type="time" class="form-control" name="jours[<?= $jour['id'] ?>][ouverture]"
-                                                                    value="<?= htmlspecialchars($jour['ouverture']) ?>">
+                                                                    value="<?= $jour['ouverture'] ?>">
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-group">
                                                                 <span class="input-group-text"><i class="fa fa-clock"></i></span>
                                                                 <input type="time" class="form-control" name="jours[<?= $jour['id'] ?>][fermeture]"
-                                                                    value="<?= htmlspecialchars($jour['fermeture']) ?>">
+                                                                    value="<?= $jour['fermeture'] ?>">
                                                             </div>
                                                         </td>
                                                         <td class="text-center">

@@ -51,17 +51,8 @@
             <h5 class="text-light mb-4">Bulletin d'information</h5>
             <p>Découvrez les dernières nouvelles, les événements à venir, et les faits marquants sur nos incroyables animaux.</p>
             <div class="position-relative mx-auto" style="max-width: 400px">
-              <input
-                class="form-control border-0 w-100 py-3 ps-4 pe-5"
-                type="text"
-                placeholder="Votre email"
-              />
-              <button
-                type="button"
-                class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2"
-              >
-                S'inscrire
-              </button>
+              
+              
             </div>
           </div>
         </div>
